@@ -1,6 +1,8 @@
 #!/usr/bin/python3
-"""Module that sends a request to a URL and displays the value of the X-Request-Id header variable"""
-
+"""
+Python script that takes in a URL, sends a request to the URL and displays the
+value of the variable X-Request-Id in the response header
+"""
 import requests
 import sys
 
