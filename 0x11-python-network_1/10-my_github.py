@@ -1,38 +1,43 @@
 #!/usr/bin/python3
 """
-Python script that uses the GitHub API to display the user ID of the
-authenticated user.
+This module takes GitHub credentials (username and personal access token)
+and uses the GitHub API to display the user's id.
+
+Usage: ./10-my_github.py <username> <token>
 """
 
-import requests
 import sys
+import requests
+
+
+def display_user_id(username: str, token: str) -> None:
+    """
+    Displays the user's GitHub id by sending a GET request to the
+    GitHub API using the provided credentials.
+
+    Args:
+        username (str): The GitHub username.
+        token (str): The personal access token associated with the
+            GitHub account.
+
+    Returns:
+        None
+    """
+    url = "https://api.github.com/user"
+    response = requests.get(url, auth=(username, token))
+
+    if response.status_code == 200:
+        data = response.json()
+        print(data.get('id'))
+    else:
+        print("None")
+
 
 if __name__ == "__main__":
-    # Check that the correct number of arguments were provided
     if len(sys.argv) != 3:
-        print("Usage: {} <username> <token>".format(sys.argv[0]))
+        print("Usage: ./10-my_github.py <username> <token>")
         sys.exit(1)
 
-    # Get the command line arguments
     username = sys.argv[1]
     token = sys.argv[2]
-
-    # Construct the URL for the authenticated user's information
-    url = "https://api.github.com/user"
-
-    # Set the authentication header with the personal access token
-    headers = {
-        "Authorization": "Basic " + username + ":" + token
-    }
-
-    # Make the request to the GitHub API
-    response = requests.get(url, headers=headers)
-
-    # If the request was successful, print the user ID
-    if response.status_code == 200:
-        json_dict = response.json()
-        print(json_dict["id"])
-    # If the request failed, print an error message
-    else:
-        print("Error: Request failed with status code {}".format(response.status_code))
-        sys.exit(1)
+    display_user_id(username, token)
