@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""This script uses the GitHub API to list the 10 most recent commits of a repository by a user."""
+"""Write a python script that;
+uses the GitHub API to list the 10 most recent commits of a repository by a user."""
 import requests
 import sys
 
