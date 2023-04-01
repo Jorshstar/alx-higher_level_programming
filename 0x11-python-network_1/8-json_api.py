@@ -1,29 +1,27 @@
 #!/usr/bin/python3
 """
-Python script that takes in a letter and sends a POST request to
-http://0.0.0.0:5000/search_user with the letter as a parameter.
+This script sends a POST request to http://0.0.0.0:5000/search_user with a given letter as a parameter.
+If the response body is properly JSON formatted and not empty, it displays the id and name of the first user.
+Otherwise, it displays a corresponding message.
 """
 
 import requests
 import sys
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     if len(sys.argv) == 2:
-        if sys.argv[1].isalpha():
-            q = sys.argv[1]
-        else:
-            q = ""
+        letter = sys.argv[1]
     else:
-        q = ""
-
+        letter = ""
+    
     try:
-        response = requests.post("http://0.0.0.0:5000/search_user", data={"q": q})
-        json_dict = response.json()
-
-        if len(json_dict) > 0:
-            print("[{}] {}".format(json_dict.get("id"), json_dict.get("name")))
-        else:
+        response = requests.post('http://0.0.0.0:5000/search_user', data={'q': letter})
+        if response.headers.get('content-type') != 'application/json':
+            raise ValueError("Not a valid JSON")
+        data = response.json()
+        if not data:
             print("No result")
-    except ValueError:
-        print("Not a valid JSON")
+        else:
+            print("[{}] {}".format(data['id'], data['name']))
+    except ValueError as e:
+        print(e)
