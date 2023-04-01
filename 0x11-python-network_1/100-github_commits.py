@@ -1,14 +1,15 @@
 #!/usr/bin/python3
+"""This script uses the GitHub API to list the 10 most recent commits of a repository by a user."""
 import requests
 import sys
 
 if __name__ == "__main__":
-    repo = sys.argv[1]
+    repository = sys.argv[1]
     owner = sys.argv[2]
-    url = f'https://api.github.com/repos/{owner}/{repo}/commits'
+    url = f"https://api.github.com/repos/{owner}/{repository}/commits"
     response = requests.get(url)
-    commits = response.json()
-    for commit in commits[:10]:
-        sha = commit.get('sha')
-        author = commit.get('commit').get('author').get('name')
+    commits = response.json()[:10]
+    for commit in commits:
+        sha = commit['sha']
+        author = commit['commit']['author']['name']
         print(f"{sha}: {author}")
